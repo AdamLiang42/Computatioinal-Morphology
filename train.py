@@ -186,7 +186,7 @@ def test_batch(model_input, labels, model, loss_fn=None):
     else:
         return {}
 
-def train_model(language, dataset, lr, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = True):
+def train_model(language, dataset, lr, epochs, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = True):
     experiment_name = "sp0_{}_{}_lr{}_em{}_hd_{}_clip{}_p{}_a{}_b{}_{}".format(language, dataset, lr, embedding_size,
                                                                                 hidden_size, str(clip), dropout_p, alpha,
                                                                                 beta, int(time.time()))
@@ -207,7 +207,7 @@ def train_model(language, dataset, lr, embedding_size, hidden_size, clip, dropou
     model_save_dir = None
     try:
         train_and_evaluate(model_inputs_train, labels_train, model_inputs_val, labels_val, model, optimizer, loss_fn,
-                        epochs=400, batch_size=32, model_save_dir=model_save_dir, writer=writer, clip=clip, show_progress = show_progress)
+                        epochs=epochs, batch_size=32, model_save_dir=model_save_dir, writer=writer, clip=clip, show_progress = show_progress)
     except KeyboardInterrupt:
         result_text, accuracy, distance = package.data.evaluate_on_dev(model, os.path.join(TASK1_DATA_PATH, '{}-dev'.format(language)))
         #print(language+':\n', 'Accuracy: {}, Average Distance: {}'.format(accuracy, distance))
@@ -226,11 +226,12 @@ def get_languages(dataset):
 if __name__ == "__main__":
     # record overall performance of all language
     datasets = ['low', 'medium', 'high']
-    datasets = ['low']
+    datasets = ['high']
     lr = 0.001
     embedding_size = 100
     hidden_size = 100
-    clip = 3
+    epochs = 100
+    clip = 0
     dropout_p = 0.5
     alpha = 0 # coefficient of attention loss
     beta = 0 # coefficient of p_gen loss
@@ -240,7 +241,7 @@ if __name__ == "__main__":
         languages = get_languages(dataset)
         #languages = ['czech']
         for language in languages:
-            accuracy, distance = train_model(language, dataset, lr, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = False)
+            accuracy, distance = train_model(language, dataset, lr, epochs, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = False)
             accuracy_collection.append(accuracy)
             distance_collection.append(distance)
             print(f"Language: {language}, Data size: {dataset},  Accuracy: {accuracy}, Distance: {distance}")
