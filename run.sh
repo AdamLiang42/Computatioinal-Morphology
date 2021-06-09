@@ -1,2 +1,4 @@
 #!/bin/sh
-python3 train.py
+cd ~/run/nlp/nlp_assignment2
+python3 helloworld.py
+done
