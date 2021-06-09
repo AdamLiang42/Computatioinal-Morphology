@@ -230,7 +230,7 @@ if __name__ == "__main__":
     lr = 0.001
     embedding_size = 100
     hidden_size = 100
-    epochs = 100
+    epochs = 70
     clip = 0
     dropout_p = 0.5
     alpha = 0 # coefficient of attention loss
@@ -239,9 +239,9 @@ if __name__ == "__main__":
         accuracy_collection = []
         distance_collection = []
         languages = get_languages(dataset)
-        #languages = ['czech']
+        languages = ['persian']
         for language in languages:
-            accuracy, distance = train_model(language, dataset, lr, epochs, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = False)
+            accuracy, distance = train_model(language, dataset, lr, epochs, embedding_size, hidden_size, clip, dropout_p, alpha, beta, show_progress = True)
             accuracy_collection.append(accuracy)
             distance_collection.append(distance)
             print(f"Language: {language}, Data size: {dataset},  Accuracy: {accuracy}, Distance: {distance}")
